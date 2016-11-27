@@ -37,7 +37,8 @@ public class TankView extends View implements SensorEventListener, View.OnTouchL
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private Display display;
-    private float frame_time = 0.333f;
+    private float frame_time = 0.25f; //Use this to control how much acceleration is used by tank
+                                      // Keep the accelerometer values low to keep tank slow
 
     public TankView(Context context) {
         super(context);
@@ -88,15 +89,15 @@ public class TankView extends View implements SensorEventListener, View.OnTouchL
         canvas.drawBitmap(terrain, 0, 0, null);
 
         tank_player.updatePosition(accel_x, accel_y, frame_time);
-//        tank_player.updatePosition(accel_x, accel_y, accel_z, timestamp);
         tank_player.resolveCollisionWithBounds(horizontal_bound, vertical_bound);
 
         // Draw all missiles
         for (int i = 0; i < tanks.size(); i++) {
             for (int j = 0; j < tanks.get(i).getMissileList().size(); j++) {
-                tanks.get(i).getMissileList().get(j).moveMissile();
-                canvas.drawBitmap(missile_image, x_origin - missile_size/2,
-                        y_origin - missile_size/2, null);
+                Missile missile = tanks.get(i).getMissileList().get(j);
+                missile.moveMissile();
+                canvas.drawBitmap(missile_image, (x_origin - missile_size/2) + missile.getX(),
+                        (y_origin - missile_size/2) - missile.getY(), null);
             }
         }
 

@@ -13,7 +13,6 @@ public class Tank {
 	private ArrayList<Missile> missileList = new ArrayList<Missile>();
 	private int size = 20;
     private float velocity_x, velocity_y;
-    private static final float COR = 0;
 
 	public Tank(float position_x, float position_y) {
         this.position_x = position_x;
@@ -59,11 +58,14 @@ public class Tank {
 		return false;
 	}
 
+	// Moves the tank using the accelerometer
     protected void updatePosition(float accel_x, float accel_y, float frame_time) {
 
+        // Calculate velocity using kinematics
         velocity_x += (accel_x * frame_time);
         velocity_y += (accel_y * frame_time);
 
+        // Calculate distance traveled using kinematics
         float distance_x = (velocity_x/2) * frame_time;
         float distance_y = (velocity_y/2) * frame_time;
 
@@ -72,33 +74,22 @@ public class Tank {
         position_y -= distance_y;
     }
 
-	// Calculate displacement using acceleration
-	protected void updatePosition(float acceleration_x, float acceleration_y,
-								  float acceleration_z, long timestamp) {
-		// Change in time
-		float dt = (System.nanoTime() - timestamp) / 5000000000000.0f;
-		velocity_x += -acceleration_x * dt;
-		velocity_y += -acceleration_y * dt;
-
-		position_x += velocity_x * dt;
-		position_y += velocity_y * dt;
-	}
-
+    // Tanks don't bounce off of boundaries, so speed = 0
     protected void resolveCollisionWithBounds(float horizontal_bound, float vertical_bound) {
         if (position_x > horizontal_bound) {
             position_x = (int)horizontal_bound;
-            velocity_x = -velocity_x * COR;
+            velocity_x = 0;
         } else if (position_x < -horizontal_bound) {
             position_x = (int)-horizontal_bound;
-            velocity_x = -velocity_x * COR;
+            velocity_x = 0;
         }
 
         if (position_y > vertical_bound) {
             position_y = (int)vertical_bound;
-            velocity_y = -velocity_y * COR;
+            velocity_y = 0;
         } else if (position_y < -vertical_bound) {
             position_y = (int)-vertical_bound;
-            velocity_y = -velocity_y * COR;
+            velocity_y = 0;
         }
     }
 }
