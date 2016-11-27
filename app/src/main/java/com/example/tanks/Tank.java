@@ -13,7 +13,7 @@ public class Tank {
 	private ArrayList<Missile> missileList = new ArrayList<Missile>();
 	private int size = 20;
     private float velocity_x, velocity_y;
-    private static final float COR = 0.1f;
+    private static final float COR = 0;
 
 	public Tank(float position_x, float position_y) {
         this.position_x = position_x;
